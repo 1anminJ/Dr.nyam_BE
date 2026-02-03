@@ -37,12 +37,22 @@
 src/main/java/com/project/dr_nyam_be/
 ├── DrNyamBeApplication.java    # 메인 애플리케이션
 │
+├── config/                      # 설정
+│   └── SecurityConfig.java      # Spring Security 설정
+│
+├── security/                    # 보안
+│   ├── JwtTokenProvider.java    # JWT 토큰 생성/검증
+│   └── JwtAuthenticationFilter.java  # JWT 인증 필터
+│
 ├── controller/                  # API 컨트롤러
+│   ├── AuthController.java      # 인증 API (로그인, 회원가입)
 │   ├── UserController.java      # 사용자 API
 │   ├── PinController.java       # 맛집 핀 API
 │   └── ShareController.java     # 공유 링크 API
 │
 ├── service/                     # 비즈니스 로직
+│   ├── AuthService.java         # 인증 로직
+│   ├── KakaoService.java        # 카카오 API 연동
 │   ├── UserService.java
 │   ├── PinService.java
 │   ├── PlaceService.java
@@ -61,7 +71,13 @@ src/main/java/com/project/dr_nyam_be/
 │   └── ShareLink.java           # 공유 링크
 │
 └── dto/                         # 데이터 전송 객체
-    ├── UserCreateRequest.java
+    ├── SignUpRequest.java       # 회원가입 요청
+    ├── LoginRequest.java        # 로그인 요청
+    ├── TokenResponse.java       # 토큰 응답
+    ├── TokenRefreshRequest.java # 토큰 갱신 요청
+    ├── UserInfoResponse.java    # 내 정보 응답
+    ├── PasswordChangeRequest.java # 비밀번호 변경 요청
+    ├── KakaoLoginRequest.java   # 카카오 로그인 요청
     ├── PinCreateRequest.java
     ├── PinUpdateRequest.java
     ├── PlaceRequest.java
@@ -136,6 +152,18 @@ http://localhost:8080/swagger-ui/index.html
 
 ## 📡 API 엔드포인트
 
+### Auth API (인증)
+| Method | Endpoint | Description | 인증 |
+|--------|----------|-------------|------|
+| POST | `/api/auth/signup` | 회원가입 | ❌ |
+| POST | `/api/auth/login` | 로그인 | ❌ |
+| POST | `/api/auth/refresh` | 토큰 갱신 | ❌ |
+| GET | `/api/auth/me` | 내 정보 조회 | ✅ |
+| PUT | `/api/auth/password` | 비밀번호 변경 | ✅ |
+| DELETE | `/api/auth/me` | 회원 탈퇴 | ✅ |
+| GET | `/api/auth/kakao/url` | 카카오 로그인 URL | ❌ |
+| POST | `/api/auth/kakao` | 카카오 로그인 | ❌ |
+
 ### User API
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -200,7 +228,11 @@ POST /api/share
 - [x] MySQL DB 연동 및 Entity 설계
 - [x] 기본 CRUD API 개발
 - [x] Swagger API 문서화
-- [ ] 카카오 OAuth2 로그인 (JWT)
+- [x] JWT 기반 인증 시스템
+- [x] 일반 로그인 (이메일/비밀번호)
+- [x] 카카오 OAuth2 로그인
+- [x] 토큰 갱신 API
+- [x] 내 정보 조회/비밀번호 변경/회원 탈퇴 API
 - [ ] 프론트엔드 연동
 - [ ] AWS 배포
 
